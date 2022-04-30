@@ -85,8 +85,8 @@ require_once('scripts/dbScript.php');
 							</thead>
 							<tbody>
 								<?php 
-								$res = $database->read(-1);
-								while($r = mysqli_fetch_assoc($res)){
+								$res = json_decode($database->read(-1), true);
+								foreach($res as $r){
 								?>
 								<tr>
 									<th scope="row"><?=$r['id'];?></th>
@@ -193,17 +193,18 @@ require_once('scripts/dbScript.php');
 				dataType: "json",
 				type: "POST",
 				success: function (data) {
-					if(data.hasOwnProperty('id')){
+					if(!data.hasOwnProperty('error')){
 						$("#id").val(userId);
 						$("#id_").show();
-						$("#full_name").val(data['fname'] + " " + data['lname']);
-						$("#fname").val(data['fname']);
-						$("#lname").val(data['lname']);
-						$("#email").val(data['email']);
-						$("#cno").val(data['cno']);
-						$("#joined_date").val(data['joined_date']);
-						$("#working_route").val(data['working_route']);
-						$("#comment_of_manager").val(data['comment_of_manager']);
+						data = data[0];
+						$("#full_name").html(data['fname'] + " " + data['lname']);
+						$("#fname").val(data['fname']).removeAttr('disabled');
+						$("#lname").val(data['lname']).removeAttr('disabled');
+						$("#email").val(data['email']).removeAttr('disabled');
+						$("#cno").val(data['cno']).removeAttr('disabled');
+						$("#joined_date").val(data['joined_date']).removeAttr('disabled');
+						$("#working_route").val(data['working_route']).removeAttr('disabled');
+						$("#comment_of_manager").val(data['comment_of_manager']).removeAttr('disabled');
 
 						$("#submitBtn").val("Update User");
 						$("#submitBtn").show();
@@ -221,17 +222,18 @@ require_once('scripts/dbScript.php');
 				dataType: "json",
 				type: "POST",
 				success: function (data) {
-					if(data.hasOwnProperty('id')){
+					if(!data.hasOwnProperty('error')){
 						$("#id").val(userId);
 						$("#id_").show();
-						$("#full_name").val(data['fname'] + " " + data['lname']);
-						$("#fname").val(data['fname']);
-						$("#lname").val(data['lname']);
-						$("#email").val(data['email']);
-						$("#cno").val(data['cno']);
-						$("#joined_date").val(data['joined_date']);
-						$("#working_route").val(data['working_route']);
-						$("#comment_of_manager").val(data['comment_of_manager']);
+						data = data[0];
+						$("#full_name").html(data['fname'] + " " + data['lname']);
+						$("#fname").val(data['fname']).attr('disabled','disabled');
+						$("#lname").val(data['lname']).attr('disabled','disabled');
+						$("#email").val(data['email']).attr('disabled','disabled');
+						$("#cno").val(data['cno']).attr('disabled','disabled');
+						$("#joined_date").val(data['joined_date']).attr('disabled','disabled');
+						$("#working_route").val(data['working_route']).attr('disabled','disabled');
+						$("#comment_of_manager").val(data['comment_of_manager']).attr('disabled','disabled');
 
 						$("#submitBtn").hide();
 						$("#user").modal();
@@ -243,7 +245,7 @@ require_once('scripts/dbScript.php');
 		$('#add').click(function() {
 			$("#id").val(0);
 			$("#id_").hide();
-			$("#full_name").val("Create User");
+			$("#full_name").html("Create User");
 			$("#fname").val("");
 			$("#lname").val("");
 			$("#email").val("");
